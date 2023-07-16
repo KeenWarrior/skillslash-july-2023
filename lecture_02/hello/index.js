@@ -23,6 +23,12 @@ let mailOptions = {
   to: options.email,
   subject: "Sending Email using Node.js",
   text: "That was easy!",
+  attachments: [
+    {
+        filename: "abc.png",
+        path: "./abc.png"
+    }
+  ]
 };
 
 transporter.sendMail(mailOptions, (error, info) => {
