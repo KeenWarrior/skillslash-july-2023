@@ -5,6 +5,9 @@
 3. Run `psql notesapp` to connect with notesapp db.
 4. You can run `\dt` to show tables.
 5. You can run `\du` to show users.
+6. `createuser username` to create user with username.
+7. ALTER ROLE "username" WITH LOGIN CREATEROLE CREATEDB;
+8. ALTER USER "username" WITH PASSWORD 'password';
 6. `\q` to quit.
 
 ## In your VS Code
@@ -21,6 +24,7 @@
  - Username : "We will learn how to create this"
  - Use password : Plaintext
  - Password : "We will learn how to create this"
+
 
 
 

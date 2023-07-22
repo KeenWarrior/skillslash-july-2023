@@ -7,8 +7,8 @@
             "driver": "PostgreSQL",
             "name": "notesapp",
             "database": "notesapp",
-            "username": "admin",
-            "password": "admin"
+            "username": "protik",
+            "password": "protik"
         }
     ]
 }
