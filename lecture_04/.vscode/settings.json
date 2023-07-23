@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": true
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "skillslash",
+            "connectString": "postgres://anujgargcse:n40lrZdMINhG@ep-withered-cake-742177.us-east-2.aws.neon.tech/neondb"
+        }
+    ]
+}
