@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const User = require('./user.model');
 
+
 const { sequelize } = require('./sequelize');
 
 const PORT = 5000;

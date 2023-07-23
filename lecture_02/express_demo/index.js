@@ -24,7 +24,7 @@ app.post('/users', (req, res) => {
     res.send(user);
 });
 
-app.put('/users/:id', (req, res) => {
+app.patch('/users/:id', (req, res) => {
     const id = req.params.id;
     const updates = req.body;
     const old = users[id];
@@ -34,6 +34,7 @@ app.put('/users/:id', (req, res) => {
     fs.writeFileSync('./users.json', JSON.stringify(users));
     res.send(latest);
 });
+
 
 app.delete('/users/:id', (req, res) => {
     const id = req.params.id;
