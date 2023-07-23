@@ -1,9 +1,16 @@
 const express = require('express');
+const cors = require('cors');
 const User = require('./user.model');
+
 const { sequelize } = require('./sequelize');
 
+const PORT = 5000;
+
 const app = express();
-app.use(express.json()); // for parsing application/json
+
+app.use(cors());
+
+app.use(express.json()); 
 
 app.get('/users', async (req, res) => {
     const users = await User.findAll();
@@ -40,6 +47,6 @@ sequelize.sync().then(() => {
     console.log('Database synced');
 });
 
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
+app.listen(PORT, () => {
+    console.log('Server started on port '+PORT);
 });
