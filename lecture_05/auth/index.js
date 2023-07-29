@@ -1,34 +1,72 @@
 const express = require("express");
-const bcrypt = require('bcrypt');
+const passport = require("passport");
+const BasicStrategy = require("passport-http").BasicStrategy;
+const session = require("express-session");
+const bcrypt = require("bcrypt");
+const sequelize = require("./sequelize");
+const User = require("./models/users.model");
 
 const app = express();
-
 app.use(express.json());
 
+var sess = {
+  secret: "skillslash",
+  cookie: {},
+};
 
-//auth
-app.use(function (req, res, next) {
-    if(req.headers.authorization){
-        const splits = req.headers.authorization.split(" ");
-        if(splits[0]== "Basic" && splits.length == 2){
-            const userpass = atob(splits[1]).split(":");
-            const user = userpass[0];
-            const pass = userpass[1];
-            const salted = bcrypt.hashSync(pass, 10);
-            console.log (user, pass, salted);
-            next();
-        } else {
-            res.status(401).send("Not authorized");
-        }
+app.use(session(sess));
+
+const str = new BasicStrategy(function (username, password, done) {
+  console.log("strategy", username, password);
+
+  User.findOne({ where: { username: username } }).then((user) => {
+    if (user) {
+      const isMatch = bcrypt.compareSync(password, user.password);
+      if (isMatch) {
+        done(null, { username: username, passport: password });
+      } else {
+        done(null, false);
+      }
     } else {
-        res.status(401).send("Not authorized");
+      done(null, false);
     }
+  });
 });
 
-app.get("/", (req, res) => {
+passport.use(str);
+
+passport.serializeUser(function (user, done) {
+  console.log("serialize", user);
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  console.log("deserialize", user);
+  done(null, user);
+});
+
+app.use(passport.initialize());
+
+app.get("/", passport.authenticate("basic"), (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+app.post("/register", (req, res) => {
+  const { username, password, name } = req.body;
+  const salted = bcrypt.hashSync(password, 10);
+  const user = {
+    username: username,
+    password: salted,
+    name: name,
+  };
+
+  User.create(user).then((response) => {
+    res.json(response);
+  });
+});
+
+sequelize.sync().then(() => {
+  app.listen(3000, () => {
+    console.log("Server is running on port 3000");
+  });
 });
