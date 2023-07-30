@@ -23,7 +23,7 @@ const str = new BasicStrategy(function (username, password, done) {
     if (user) {
       const isMatch = bcrypt.compareSync(password, user.password);
       if (isMatch) {
-        done(null, { username: username, passport: password });
+        done(null, { username: username, name: user.name, id: user.id });
       } else {
         done(null, false);
       }
@@ -48,6 +48,7 @@ passport.deserializeUser(function (user, done) {
 app.use(passport.initialize());
 
 app.get("/", passport.authenticate("basic"), (req, res) => {
+  console.log("user", req.user);
   res.send("Hello World!");
 });
 
