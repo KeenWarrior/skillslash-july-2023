@@ -3,6 +3,7 @@ import { SocketContext } from "./App";
 import { useDispatch, useSelector } from "react-redux";
 import socketIOClient from "socket.io-client";
 import Messages from "./components/Messages";
+import axios from "axios";
 
 export default function Ping() {
   const { socket, setSocket } = useContext(SocketContext);
@@ -26,6 +27,14 @@ export default function Ping() {
       },
     });
     setSocket(newSocket);
+
+    axios.get("http://localhost:5000/").then((response) => {
+        if(response.data){
+            const chats = response.data;
+            console.log(chats);
+            dispatch({type: "SET_CHATS", payload: chats});
+        }
+    });
   }, []);
 
   return (
