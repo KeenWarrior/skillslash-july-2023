@@ -3,34 +3,59 @@ import "./App.css";
 import { createContext, useEffect, useState } from "react";
 import socketIOClient from "socket.io-client";
 import Ping from "./Ping";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  onAuthStateChanged,
+} from "@firebase/auth";
+import firebaseApp from "./utils/firebaseApp";
 
 export const SocketContext = createContext();
 
 function App() {
   const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (socket) {
-      socket.on("message", (message) => {
-        dispatch({ type: "ADD_CHAT", payload: message });
-      });
-    }
-  }, [socket]);
-
-  useEffect(() => {
-    if (!socket || (socket && socket.disconnected)) {
-      const newSocket = socketIOClient("http://localhost:5000");
-      setSocket(newSocket);
-    }
+    onAuthStateChanged(getAuth(firebaseApp), (user) => {
+      if (user) {
+        dispatch({ type: "SET_USER", payload: user });
+        console.log(user);
+      } else {
+        dispatch({ type: "SET_USER", payload: null });
+      }
+    });
   }, []);
 
   return (
     <div className="App">
-      <SocketContext.Provider value={socket}>
-        {socket ? <Ping /> : <h1>Not connected</h1>}
-      </SocketContext.Provider>
+      {!user && (
+        <button
+          onClick={() => {
+            signInWithPopup(getAuth(firebaseApp), new GoogleAuthProvider());
+          }}
+        >
+          Login with Google
+        </button>
+      )}
+
+      {user && (
+        <>
+          <button
+            onClick={() => {
+              getAuth(firebaseApp).signOut();
+            }}
+          >
+            Logout
+          </button>
+          <SocketContext.Provider value={{socket, setSocket}}>
+            <Ping />
+          </SocketContext.Provider>
+        </>
+      )}
     </div>
   );
 }

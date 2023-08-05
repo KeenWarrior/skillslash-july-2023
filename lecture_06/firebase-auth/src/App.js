@@ -1,5 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
+import axios from "./utils/axios";
 
 import firebaseApp from "./utils/firebaseApp";
 import Login from "./Login";
@@ -17,6 +18,7 @@ function App() {
       if (user) {
         user.getIdToken().then((token) => {
           console.log(token);
+          axios.defaults.headers["Authorization"] = "Bearer " + token;
           dispatch({ type: "SET_TOKEN", payload: token });
         });
       }
@@ -36,6 +38,21 @@ function App() {
             }}
           >
             Log out
+          </button>
+
+          <button
+            onClick={() => {
+              axios
+                .get("http://localhost:5000/")
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }}
+          >
+            Ping
           </button>
         </>
       ) : (
