@@ -1,3 +1,13 @@
+## MongoDB setup
+- Open MongoDB Atlas
+- Creat account    
+- (Optional) Install MongoSH https://www.mongodb.com/docs/mongodb-shell/
+- Install https://marketplace.visualstudio.com/items?itemName=mongodb.mongodb-vscode
+
+
+
+    
+    
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cross-env": "^7.0.0",
