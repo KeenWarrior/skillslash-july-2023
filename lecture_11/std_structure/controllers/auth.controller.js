@@ -14,6 +14,12 @@ async function login(req, res) {
   }
 }
 
+async function userProfile(req, res) {
+    const user = req.user;
+    return res.status(200).json(user);
+}
+
 module.exports = {
-    login
+    login,
+    userProfile,
 }
