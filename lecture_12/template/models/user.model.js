@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const toJSON = require("./plugins/toJSON.plugin");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -37,7 +38,7 @@ const userSchema = new mongoose.Schema(
   {
     methods: {
       verifyPassword(password) {
-        return password === this.password;
+        return bcrypt.compareSync(password, this.password);
       },
     },
   }

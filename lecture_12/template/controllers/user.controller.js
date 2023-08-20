@@ -1,54 +1,45 @@
 const userServices = require("../services/user.service");
+const ApiError = require("../utils/ApiError");
+const catchAsync = require("../utils/catchAsync");
 
-async function createUser(req, res) {
-  try {
-    const user = await userServices.createUser(req.body);
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-}
+const createUser = catchAsync(async (req, res) => {
+  const user = await userServices.createUser(req.body);
+  res.status(201).json(user);
+});
 
-async function getUsers(req, res) {
-  try {
-    const users = await userServices.getUsers();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-}
+const getUsers = catchAsync(async (req, res) => {
+  const users = await userServices.getUsers();
+  res.status(200).json(users);
+});
 
-async function getUserById(req, res) {
-  try {
-    const user = await userServices.getUserById(req.params.id);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json(error);
+const getUserById = catchAsync(async (req, res) => {
+  const user = await userServices.getUserById(req.params.id);
+  if(!user){
+    throw new ApiError(404, "User not found");
   }
-}
+  res.status(200).json(user);
+});
 
-async function updateUser(req, res) {
-  try {
-    const user = await userServices.updateUser(req.params.id, req.body);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json(error);
+const updateUser = catchAsync(async (req, res) => {
+  const user = await userServices.updateUser(req.params.id, req.body);
+  if(!user){
+    throw new ApiError(404, "User not found");
   }
-}
+  res.status(200).json(user);
+});
 
-async function deleteUser(req, res) {
-  try {
-    const user = await userServices.deleteUser(req.params.id);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json(error);
+const deleteUser = catchAsync(async (req, res) => {
+  const user = await userServices.deleteUser(req.params.id);
+  if(!user){
+    throw new ApiError(404, "User not found");
   }
-}
+  res.status(200).json(user);
+});
 
 module.exports = {
-    createUser,
-    getUsers,
-    getUserById,
-    updateUser,
-    deleteUser,
-}
+  createUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+};

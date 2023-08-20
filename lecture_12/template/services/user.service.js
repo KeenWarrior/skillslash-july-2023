@@ -1,48 +1,30 @@
 const User = require("../models/user.model");
+const bcrypt = require("bcryptjs");
 
-async function createUser(user) {
+const createUser = async (user) => {
+  user.password = bcrypt.hashSync(user.password, 10);
   return await User.create(user);
-}
+};
 
-async function getUsers() {
-  try {
-    return await User.find();
-  } catch (error) {
-    throw new Error(error);
-  }
-}
+const getUsers = async () => {
+  return await User.find();
+};
 
-async function getUserById(id) {
-  try {
-    return await User.findById(id);
-  } catch (error) {
-    throw new Error(error);
-  }
-}
+const getUserById = async (id) => {
+  return await User.findById(id);
+};
 
-async function getUserByEmail(email) {
-  try {
-    return await User.findOne({ email });
-  } catch (error) {
-    throw new Error(error);
-  }
-}
+const getUserByEmail = async (email) => {
+  return await User.findOne({ email });
+};
 
-async function updateUser(id, user) {
-  try {
-    return await User.findByIdAndUpdate(id, user, { new: true });
-  } catch (error) {
-    throw new Error(error);
-  }
-}
+const updateUser = async (id, user) => {
+  return await User.findByIdAndUpdate(id, user, { new: true });
+};
 
-async function deleteUser(id) {
-  try {
-    return await User.findByIdAndDelete(id);
-  } catch (error) {
-    throw new Error(error);
-  }
-}
+const deleteUser = async (id) => {
+  return await User.findByIdAndDelete(id);
+};
 
 module.exports = {
   createUser,
@@ -50,5 +32,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  getUserByEmail
+  getUserByEmail,
 };
