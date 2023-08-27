@@ -1,6 +1,8 @@
 const User = require("../models/user.model");
+const bcrypt = require("bcryptjs");
 
 async function createUser(user) {
+  user.password = bcrypt.hashSync(user.password, 10);
   return await User.create(user);
 }
 

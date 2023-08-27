@@ -1,6 +1,13 @@
 const tokenService = require("../services/token.service");
 const userService = require("../services/user.service");
 
+
+async function register(req, res) {
+  const user = await userService.createUser(req.body);
+  const token = await tokenService.createToken(user, "access", 15);
+  return res.status(200).json({ user, token });
+}
+
 async function login(req, res) {
   const { email, password } = req.body;
   const user = await userService.getUserByEmail(email);
@@ -22,4 +29,5 @@ async function userProfile(req, res) {
 module.exports = {
     login,
     userProfile,
+    register
 }

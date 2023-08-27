@@ -1,6 +1,7 @@
 const Chat = require("./models/chat.model");
 const socketIO = require("socket.io");
 const firebaseAdmin = require("./utils/firebaseAdmin");
+const User = require("./models/user.model");
 
 const initSocketIO = (server) => {
   const io = socketIO(server, {
@@ -15,6 +16,16 @@ const initSocketIO = (server) => {
       return next(new Error("invalid token"));
     } else {
       const user = await firebaseAdmin.auth().verifyIdToken(token);
+      await User.findOrCreate({
+        where: {
+          uid: user.uid,
+        },
+        defaults: {
+          name: user.name,
+          picture: user.picture,
+        },
+      });
+      
       if (!user) {
         return next(new Error("invalid token"));
       } else {
@@ -34,18 +45,17 @@ const initSocketIO = (server) => {
     });
 
     socket.on("message", (payload) => {
-      console.log(payload, socket.id, new Date());
-
+    
       const response = {
         ...payload,
-        uid: socket.user.uid,
-        name: socket.user.name,
-        picture: socket.user.picture,
+        from: socket.user.uid,
         timestamp: new Date(),
       };
 
-      io.emit("message", response);
-      Chat.create(response);
+      console.log(response);
+
+      io.to(response.from).emit("message", response);
+      io.to(response.to).emit("message", response);
     });
   });
 }

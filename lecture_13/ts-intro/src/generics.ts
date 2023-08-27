@@ -43,11 +43,11 @@ class LinkedList<T> {
 }
 
 const list = new LinkedList<number>();
+
 list.insertAtBeginning(1);
 list.insertAtBeginning(2);
 list.insertAtBeginning(3);
-list.insertAtEnd(4);
-list.insertAtEnd(5);
+list.insertAtBeginning(4);
 
 list.print();
 
