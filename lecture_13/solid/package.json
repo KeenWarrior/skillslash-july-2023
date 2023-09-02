@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "composit": "ts-node src/composit.ts",
+    "single": "ts-node src/single-res.ts",
     "ioc": "ts-node src/ioc.ts",
     "liskov": "ts-node src/liskov.ts",
     "interface": "ts-node src/interface-seq.ts",
@@ -13,6 +15,10 @@
   "license": "ISC",
   "dependencies": {
     "mongoose": "^7.4.5",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.2"
   }
 }

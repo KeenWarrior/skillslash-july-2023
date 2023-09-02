@@ -1,6 +1,8 @@
 import mongoose, { Schema } from "mongoose";
+import { v1 as uuid } from "uuid";
 
 interface User {
+  id: string;
   name: string;
   age: number;
 }
@@ -13,6 +15,16 @@ const UserSchema = new Schema<User>({
   age: {
     type: Number,
     required: true,
+  },
+}, {
+  methods: {
+    toJSON() {
+      return {
+        id: this._id.toString(),
+        name: this.name,
+        age: this.age,
+      };
+    },
   },
 });
 
@@ -39,7 +51,7 @@ interface IUserRepositry {
 class MongoUserRepositry implements IUserRepositry {
   async createUser(data: CreateUserDto): Promise<User | undefined> {
     const user = await UserModel.create(data);
-    return user.toObject();
+    return user;
   }
 
   async updateUser(
@@ -52,22 +64,22 @@ class MongoUserRepositry implements IUserRepositry {
     if (!user) {
       return undefined;
     }
-    return user.toObject();
+    return user.toJSON();
   }
 
   async deleteUser(name: string): Promise<User | undefined> {
     const user = await UserModel.findOneAndDelete({ name });
-    return user?.toObject();
+    return user?.toJSON();
   }
 
   async getUser(name: string): Promise<User | undefined> {
     const user = await UserModel.findOne({ name });
-    return user?.toObject();
+    return user?.toJSON();
   }
 
   async getUsers(): Promise<Array<User>> {
     const users = await UserModel.find();
-    return Array.from(users.map((u) => u.toObject()));
+    return Array.from(users, (u) => u.toJSON());
   }
 }
 
@@ -76,6 +88,7 @@ class InMemoUserRepositry implements IUserRepositry {
 
   async createUser(data: CreateUserDto): Promise<User | undefined> {
     const user: User = {
+      id: uuid(),
       name: data.name,
       age: data.age,
     };
@@ -84,12 +97,15 @@ class InMemoUserRepositry implements IUserRepositry {
     return new Promise((resolve) => resolve(user));
   }
 
-  async updateUser(name: string, data: UpdateUserDto): Promise<User | undefined> {
+  async updateUser(
+    name: string,
+    data: UpdateUserDto,
+  ): Promise<User | undefined> {
     const user = this.users.find((u) => u.name === name);
     if (!user) {
       return undefined;
     }
-    
+
     user.name = data.name || user.name;
     user.age = data.age || user.age;
 
@@ -140,17 +156,15 @@ class UserService {
 }
 
 const init = async () => {
-    await mongoose.connect("mongodb://localhost:27017/ioc");
-    const userRepositry = new InMemoUserRepositry();
-    const userService = new UserService(userRepositry);
-    await userRepositry.createUser({ name: "John", age: 20 });
-    await userRepositry.createUser({ name: "Jane", age: 30 });
-    await userRepositry.createUser({ name: "Jack", age: 40 });
+  await mongoose.connect("mongodb://localhost:27017/ioc");
+  const userRepositry = new InMemoUserRepositry();
+  const userService = new UserService(userRepositry);
+  await userRepositry.createUser({ name: "John", age: 20 });
+  await userRepositry.createUser({ name: "Jane", age: 30 });
+  await userRepositry.createUser({ name: "Jack", age: 40 });
 
-    const users = await userService.getUsers();
-    console.log(users);
-}
+  const users = await userService.getUser("John");
+  console.log(users);
+};
 
 init();
-
-
