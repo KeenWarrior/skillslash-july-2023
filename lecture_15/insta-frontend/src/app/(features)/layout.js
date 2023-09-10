@@ -3,6 +3,9 @@ import "../globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import CustomAppBar from "@/components/CustomAppBar";
+import { Suspense } from "react";
+import Redirect from "@/components/Redirect";
+import AddPostFab from "@/components/AddPostFab";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,15 +25,43 @@ export default async function RootLayout({ children }) {
     },
   });
 
+  if (response.status !== 200) {
+    return (
+      <Suspense
+        fallback={
+          <div
+            style={{
+              width: "100vw",
+              height: "100vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            Redirecting to Login...
+          </div>
+        }
+      >
+        <Redirect to="/login" />
+      </Suspense>
+    );
+  }
+
   const user = await response.json();
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <CustomAppBar user={user} />
-        <SideDrawer />
-        {children}
-      </body>
-    </html>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
+      <CustomAppBar user={user} />
+      <SideDrawer />
+      {children}
+    </div>
   );
 }

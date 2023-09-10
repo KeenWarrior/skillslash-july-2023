@@ -1,4 +1,6 @@
+import AddPostFab from "@/components/AddPostFab";
 import PostCard from "@/components/PostCard";
+import { Suspense } from "react";
 
 const getPosts = async () => {
   const response = await fetch("http://localhost:5000/v1/posts", {
@@ -25,6 +27,10 @@ export default async function Home() {
       {posts.map((post) => {
         return <PostCard key={post.id} post={post} />;
       })}
+
+      <Suspense>
+        <AddPostFab />
+      </Suspense>
     </div>
   );
 }
