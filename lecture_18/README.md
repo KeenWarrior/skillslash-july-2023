@@ -1,0 +1,1 @@
+`mongoimport --file=stockdata.csv --db=stocks --headerline --type=cs`
