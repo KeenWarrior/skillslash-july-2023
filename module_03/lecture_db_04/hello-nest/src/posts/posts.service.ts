@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { UpdatePostDto } from "./dto/update-post.dto";
 import { InjectModel } from "@nestjs/mongoose";
@@ -11,7 +11,7 @@ export class PostsService {
     @InjectModel(Post.name) private postModel: Model<Post>,
   ) {}
 
-  create(createPostDto: CreatePostDto): Promise<Post> {
+  create(createPostDto: any): Promise<Post> {
     const post = this.postModel.create(createPostDto);
     return post;
   }
@@ -31,7 +31,11 @@ export class PostsService {
     });
   }
 
-  remove(id: string) {
-    return this.postModel.findByIdAndDelete(id);
+  remove(id: string, requestedBy: string) {
+    const post = this.postModel.findOneAndDelete({
+      _id: id,
+      author: requestedBy,
+    });
+    return post;
   }
 }
