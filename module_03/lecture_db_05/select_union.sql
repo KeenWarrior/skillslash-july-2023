@@ -1,0 +1,1 @@
+SELECT NAME AS USERNAME from users INTERSECT SELECT NAME from people;
