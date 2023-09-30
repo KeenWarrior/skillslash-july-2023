@@ -1,0 +1,6 @@
+CREATE TABLE CptCode (
+    dimCPTCodePK INT PRIMARY KEY,
+    CptCode VARCHAR(255) NOT NULL,
+    CptDesc VARCHAR(255) NOT NULL,
+    CptGrouping VARCHAR(255) NOT NULL
+)
