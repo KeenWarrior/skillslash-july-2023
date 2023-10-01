@@ -11,6 +11,7 @@ export default function MapComponent() {
     setInterval(() => {
       Geolocation.getCurrentPosition().then((pos) => {
         setPosition([pos.coords.latitude, pos.coords.longitude]);
+
       });
     }, 5000);
   }, []);

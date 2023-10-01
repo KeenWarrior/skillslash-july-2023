@@ -1,10 +1,11 @@
 import './App.css';
+import CameraComponent from './Camera';
 import MapComponent from './MapComponent';
 
 function App() {
   return (
     <div className="App">
-      <MapComponent />
+      <CameraComponent />
     </div>
   );
 }
