@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  mongoOld:
+    image: mongo:6.0.11
+    ports:
+      - 27018:27017
+    command: mongod
+
+  mongoNew:
+    image: mongo:latest
+    ports:
+      - 27019:27017
+    command: mongod
