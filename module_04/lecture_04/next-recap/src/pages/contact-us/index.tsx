@@ -1,6 +1,7 @@
 import Link from "next/link";
+import members from "../../data/members";
 
-export default function ContactUsPage() {
+export default function ContactUsPage({ members }: { members: Array<any> }) {
   return (
     <>
       <h1>Contact Us Page</h1>
@@ -11,6 +12,23 @@ export default function ContactUsPage() {
       <button>
         <Link href="/">Home</Link>
       </button>
+
+      <ul>
+        {members.map((member) => (
+          <li key={member.id}>{member.name}</li>
+        ))}
+      </ul>
     </>
   );
+}
+
+export function getStaticProps() {
+
+    console.log('Hello from getStaticProps');  
+
+  return {
+    props: {
+      members,
+    },
+  };
 }
