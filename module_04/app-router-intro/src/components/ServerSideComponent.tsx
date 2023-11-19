@@ -1,6 +1,10 @@
 async function getUserInfo() {
   console.log("ServerSideComponent");
-  const res = await fetch("https://api.github.com/users/keenwarrior");
+  const res = await fetch("https://api.github.com/users/keenwarrior", {
+    next: {
+        revalidate: 60,
+    }
+  });
   const data = await res.json();
   return data;
 }
