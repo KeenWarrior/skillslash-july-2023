@@ -1,10 +1,12 @@
 import axios from "axios";
+import Script from "next/script";
 
 export default function UsersWithUsername({ user }: { user: any }) {
   return (
     <>
       <h1>{user.name}</h1>
       <p>{user.bio}</p>
+      <button id="hitme">Click Me</button>
     </>
   );
 }

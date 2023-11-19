@@ -1,6 +1,13 @@
+import thor from "@/images/thor.jpg"
+import Image from "next/image"
+
 export default function Home() {
   return (
-    <h1>Hello to Next.js</h1>
+    <>
+     <h1>Hello to Next.js</h1>
+     <Image src={thor} alt="Thor" height={100}  />
+    </>
+   
   )
 }
 
