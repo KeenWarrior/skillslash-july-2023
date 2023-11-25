@@ -1,0 +1,35 @@
+<form>
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 200px;
+      margin-top: 30px;
+    "
+  >
+    <input
+      name="query"
+      type="text"
+      placeholder="Query"
+      [(ngModel)]="search.query"
+    />
+    <input
+      name="range"
+      type="text"
+      placeholder="Range"
+      [(ngModel)]="search.range"
+    />
+    <input
+      name="type"
+      type="text"
+      placeholder="Type"
+      [(ngModel)]="search.type"
+    />
+    <select name="sort" [(ngModel)]="search.sort">
+      <option value="desc">Descending</option>
+      <option value="asc">Ascending</option>
+    </select>
+    <button type="submit" (click)="onSubmit()">Search</button>
+  </div>
+</form>
