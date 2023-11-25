@@ -1,8 +1,16 @@
 <div id="root">
-  <app-header></app-header>
-  <app-content ></app-content>
-  <app-footer></app-footer>
+  <h2>{{ user.name }}</h2>
+  <img src="{{ user.avatar_url }}" width="200px" height="200px" alt="avatar" />
+  <input type="text" [(ngModel)]="username" />
+  <h3>{{ username }}</h3>
+  <button (click)="getUser()">Get User</button>
+  <p>Selected date is {{ selectedDate }}</p>
+
+  <mat-form-field>
+    <mat-label>Choose a date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 </div>
-
-
-
